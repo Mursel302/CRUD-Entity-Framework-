@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CRUD_2Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="BooksTable">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="BookName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ISBN" Type="Int32" />
+    <Property Name="Author" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PublishDate" Type="DateTime" Precision="0" />
+    <Property Name="CategoryID" Type="Int32" />
+    <NavigationProperty Name="CategoryTable" Relationship="Self.FK_BooksTable_CategoryTable" FromRole="BooksTable" ToRole="CategoryTable" />
+  </EntityType>
+  <EntityType Name="CategoryTable">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="BooksTables" Relationship="Self.FK_BooksTable_CategoryTable" FromRole="CategoryTable" ToRole="BooksTable" />
+  </EntityType>
+  <Association Name="FK_BooksTable_CategoryTable">
+    <End Role="CategoryTable" Type="Self.CategoryTable" Multiplicity="0..1" />
+    <End Role="BooksTable" Type="Self.BooksTable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CategoryTable">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="BooksTable">
+        <PropertyRef Name="CategoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CRUD_2Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="BooksTables" EntityType="Self.BooksTable" />
+    <EntitySet Name="CategoryTables" EntityType="Self.CategoryTable" />
+    <AssociationSet Name="FK_BooksTable_CategoryTable" Association="Self.FK_BooksTable_CategoryTable">
+      <End Role="CategoryTable" EntitySet="CategoryTables" />
+      <End Role="BooksTable" EntitySet="BooksTables" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
